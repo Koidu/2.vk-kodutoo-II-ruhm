@@ -9,7 +9,7 @@
 <body>
   <nav class="menu">
     <ul class="menu-list">
-      <li class="menu-item"><a href="#home-view" class"menu-link home-view active-menu">Home</a></li>
+      <li class="menu-item"><a href="#home-view" class"menu-link home-view active-menu">Home </a></li>
       <li class="menu-item"><a href="#calendar-view" class="menu-link calendar-view">Calendar</a></li>
       <li class="menu-item"><a href="#to-do-view" class="menu-link to-do-view">To do list</a></li>
     </ul>
@@ -17,12 +17,20 @@
 
   <main role="main">
     <div id="home-view">
-      <h1>Home page</h1>
+      <h1>Home</h1>
       <ul class="list-of-meetings"></ul>
     </div>
 
     <div id="calendar-view">
       <h1>Calendar</h1>
+      <label for="title">Start at (dd.mm.yyyy --:--): </label><br><br>
+      <input type="date" name="start-date" class="start-date"></input><br><br>
+      <input type="time" name="start-time" class="start-time"></input><br><br>
+      <label for="title">Finish at (dd.mm.yyyy --:--): </label><br><br>
+      <input type="date" name="finish-date" class="finish-date"></input><br><br>
+      <input type="time" name="finish-time" class="finish-time"></input><br><br>
+      <label for="title">Meeting: </label><br><br>
+      <input type="text" name="meeting-description" class"meeting-description"></input><br><br>
       <button class="add-new-meetings">Add meeting</button>
     </div>
 
