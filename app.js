@@ -44,30 +44,59 @@
 
     bindMouseEvents: function(){
       document.querySelector('.add-new-meetings').addEventListener('click', this.addNewClic.bind(this));
-      //document.querySelector('.add-new-to-do').addEventListener('click', this.addNewClic.bind(this));
+      //document.querySelector('.add-new-to-do').addEventListener('click', this.addNewTask.bind(this));
     },
+
+    deleteMeeting: function(event){
+      console.log(event.target);
+      console.log(event.target.parentNode);
+      console.log(event.target.parentNode.parentNode);
+      console.log(event.target.dataset.id);
+      var c = confirm("Oled kindel?");
+      console.log('kustutan');
+      var ul = event.target.parentNode.parentNode;
+  		var li = event.target.parentNode;
+      ul.removeChild(li);
+
+      var delete_id = event.target.dataset.id;
+
+  		for(var i = 0; i < this.collection.length; i++){
+
+  			if(this.collection[i].id == delete_id){
+  				this.collection.splice(i, 1);
+  				break;
+  			}
+  		}
+
+  		localStorage.setItem('event', JSON.stringify(this.collection));
+
+    },
+
+    // addNewTask: function(event){
+    //   var finish_date_task = document.querySelector('.finish-date').value;
+    //   var finish_time_task = document.querySelector('.finish-time').value;
+    //   console.log(document.querySelector('.task-description'));
+    //   var task_description = document.querySelector('.task-description').value;
+    //   //var new_task = new Task(finish_date_task, finish_time_task, task_description);
+    //  this.collection.push(new_task);
+    // },
 
     addNewClic: function(event){
       var start_date = document.querySelector('.start-date').value;
       var start_time = document.querySelector('.start-time').value;
       var finish_date = document.querySelector('.finish-date').value;
       var finish_time = document.querySelector('.finish-time').value;
-      // var finish_date_task = document.querySelector('.finish-date').value;
-      // var finish_time_task = document.querySelector('.finish-time').value;
-      // console.log(document.querySelector('.task-description'));
       console.log(document.querySelector('.meeting-description'));
 
 
 
       var meeting_description = document.querySelector('.meeting-description').value;
-      //console.log(start_date+' '+start_time+' '+finish_date+' '+finish_time+' '+meeting_description);
-      //var task_description = document.querySelector('.task-description').value;
+
 
       var new_meeting = new Meeting(start_date, start_time, finish_date, finish_time, meeting_description);
-      //var new_task = new Task(finish_date_task, finish_time_task, task_description);
+
 
       this.collection.push(new_meeting);
-    //  this.collection.push(new_task);
       console.log(JSON.stringify(this.collection));
       localStorage.setItem('events', JSON.stringify(this.collection));
 
@@ -107,39 +136,39 @@
     this.type = "meeting";
   };
 
-  var Task = function(new_finish_date_task, new_finish_time_task, new_task_description){
-    this.finish_date_task = new_finish_date_task;
-    this.finish_time_task = new_finish_time_task;
-    this.task_description = new_task_description;
-    this.type = "task";
-  };
+  // var Task = function(new_finish_date_task, new_finish_time_task, new_task_description){
+  //   this.finish_date_task = new_finish_date_task;
+  //   this.finish_time_task = new_finish_time_task;
+  //   this.task_description = new_task_description;
+  //   this.type = "task";
+  // };
 
-  Task.prototype={
-    createHtmlElement: function(){
-      var li = document.createElement('li');
-
-      var span = document.createElement('span');
-      span.className = 'letter';
-
-      var letter = document.createTextNode(this.task_description.charAt(0));
-      span.appendChild(letter);
-
-      li.appendChild(span);
-
-      var content_span = document.createElement('span');
-      content_span.className = 'content';
-
-      var content = document.createTextNode(this.finish_date_task +'  ' + this.finish_time_task + ' | ' + this.task_description);
-
-      content_span.appendChild(content);
-
-      li.appendChild(content_span);
-
-      console.log(li);
-
-      return li;
-    }
-  };
+  // Task.prototype={
+  //   createHtmlElement: function(){
+  //     var li = document.createElement('li');
+  //
+  //     var span = document.createElement('span');
+  //     span.className = 'letter';
+  //
+  //     var letter = document.createTextNode(this.task_description.charAt(0));
+  //     span.appendChild(letter);
+  //
+  //     li.appendChild(span);
+  //
+  //     var content_span = document.createElement('span');
+  //     content_span.className = 'content';
+  //
+  //     var content = document.createTextNode(this.finish_date_task +'  ' + this.finish_time_task + ' | ' + this.task_description);
+  //
+  //     content_span.appendChild(content);
+  //
+  //     li.appendChild(content_span);
+  //
+  //     console.log(li);
+  //
+  //     return li;
+  //   }
+  // };
 
   Meeting.prototype={
     createHtmlElement: function(){
@@ -163,6 +192,17 @@
       li.appendChild(content_span);
 
       console.log(li);
+
+      //DELETE nupp
+      var span_delete = document.createElement('span');
+ 	    span_delete.style.color = "red";
+ 	    span_delete.style.cursor = "pointer";
+ 	    //kustutamiseks panen id kaasa
+ 	    span_delete.setAttribute("data-id", this.id);
+ 	    span_delete.innerHTML = " Delete";
+ 	    li.appendChild(span_delete);
+ 	    //keegi vajutas nuppu
+ 	    span_delete.addEventListener("click", Calendar.instance.deleteMeeting.bind(Calendar.instance));
 
       return li;
     }
