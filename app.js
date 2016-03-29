@@ -23,12 +23,28 @@
   Calendar.prototype = {
     init: function(){
       console.log('rakendus käivitus');
+
+      if(localStorage.events){
+        this.collection = JSON.parse(localStorage.events);
+        console.log('laadisin massiivi' + this.collection.length);
+
+        this.collection.forEach(function(collection){
+
+            var new_collection = new Meeting( collection.start_date, collection.start_time, collection.finish_date, collection.finish_time, collection.meeting_description);
+
+            var li = new_collection.createHtmlElement();
+            document.querySelector('.list-of-meetings').appendChild(li);
+
+        });
+      }
+
+
       this.bindMouseEvents();
     },
 
     bindMouseEvents: function(){
       document.querySelector('.add-new-meetings').addEventListener('click', this.addNewClic.bind(this));
-      document.querySelector('.add-new-to-do').addEventListener('click', this.addNewClic.bind(this));
+      //document.querySelector('.add-new-to-do').addEventListener('click', this.addNewClic.bind(this));
     },
 
     addNewClic: function(event){
@@ -36,20 +52,25 @@
       var start_time = document.querySelector('.start-time').value;
       var finish_date = document.querySelector('.finish-date').value;
       var finish_time = document.querySelector('.finish-time').value;
-      var finish_date_task = document.querySelector('.finish-date').value;
-      var finish_time_task = document.querySelector('.finish-time').value;
-      console.log(document.querySelector('.task-description'));
+      // var finish_date_task = document.querySelector('.finish-date').value;
+      // var finish_time_task = document.querySelector('.finish-time').value;
+      // console.log(document.querySelector('.task-description'));
       console.log(document.querySelector('.meeting-description'));
+
+
+
       var meeting_description = document.querySelector('.meeting-description').value;
       //console.log(start_date+' '+start_time+' '+finish_date+' '+finish_time+' '+meeting_description);
-      var task_description = document.querySelector('.task-description').value;
+      //var task_description = document.querySelector('.task-description').value;
 
       var new_meeting = new Meeting(start_date, start_time, finish_date, finish_time, meeting_description);
-      var new_task = new Task(finish_date_task, finish_time_task, task_description);
+      //var new_task = new Task(finish_date_task, finish_time_task, task_description);
 
       this.collection.push(new_meeting);
-      this.collection.push(new_task);
-      console.log(this.collection);
+    //  this.collection.push(new_task);
+      console.log(JSON.stringify(this.collection));
+      localStorage.setItem('events', JSON.stringify(this.collection));
+
 
       //sorteeri
       //this.collection
@@ -57,7 +78,7 @@
           return meeting1.start_date > meeting2.start_date;
        });
 
-       //ksututab k]ik tühjaks
+       //kustutab kõik tühjaks
       document.querySelector('.list-of-meetings').innerHTML = '';
 
       for(var i = 0; i < this.collection.length; i++){
