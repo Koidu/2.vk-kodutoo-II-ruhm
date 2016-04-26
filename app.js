@@ -75,6 +75,39 @@
 
     },
 
+    editMeeting: function(event){
+      var selected_id = event.target.dataset.id;
+      var clicked_li = event.target.parentNode;
+      $("#ModalEdit").modal({backdrop: true});
+
+      $(document).on("click", "#edit_close", function(event){
+        return;
+      });
+
+      $(document).on("click", "#save", function(event){
+        console.log(clicked_li);
+        var meeting_description = document.querySelector('.Editmeeting-description').value;
+        var start_date = document.querySelector('.Editstart-date').value;
+        var start_time = document.querySelector('.Editstart-time').value;
+        var finish_date = document.querySelector('.Editfinish-date').value;
+        var finish_time = document.querySelector('.Editfinish-time').value;
+        this.collection = JSON.parse(localStorage.events);
+        clicked_li.parentNode.removeChild(clicked_li);
+        for(var i=0; i<this.collection.length; i++){
+          if(this.collection[i].id == selected_id){
+            this.collection[i].meeting_description = meeting_description;
+            this.collection[i].start_date = start_date;
+            this.collection[i].start_time = start_time;
+            this.collection[i].finish_date = finish_date;
+            this.collection[i].finish_time = finish_time;
+            break;
+          }
+        }
+        localStorage.setItem('events', JSON.stringify(this.collection));
+        location.reload();
+        });
+    },
+
     // addNewTask: function(event){
     //   var finish_date_task = document.querySelector('.finish-date').value;
     //   var finish_time_task = document.querySelector('.finish-time').value;
@@ -206,6 +239,16 @@
  	    li.appendChild(span_delete);
  	    //keegi vajutas nuppu
  	    span_delete.addEventListener("click", Calendar.instance.deleteMeeting.bind(Calendar.instance));
+
+      //Edit nupp
+     var span_edit = document.createElement('span');
+     span_edit.style.color = "green";
+     span_edit.style.cursor = "pointer";
+     span_edit.setAttribute("data-id", this.id);
+     span_edit.innerHTML = " Edit";
+     li.appendChild(span_edit);
+     span_edit.addEventListener("click", Calendar.instance.editMeeting.bind(Calendar.instance));
+
 
       return li;
     }
