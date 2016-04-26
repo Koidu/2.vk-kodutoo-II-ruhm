@@ -30,7 +30,7 @@
 
         this.collection.forEach(function(collection){
 
-            var new_collection = new Meeting( collection.start_date, collection.start_time, collection.finish_date, collection.finish_time, collection.meeting_description);
+            var new_collection = new Meeting(collection.id, collection.start_date, collection.start_time, collection.finish_date, collection.finish_time, collection.meeting_description);
 
             var li = new_collection.createHtmlElement();
             document.querySelector('.list-of-meetings').appendChild(li);
@@ -53,6 +53,9 @@
       console.log(event.target.parentNode.parentNode);
       console.log(event.target.dataset.id);
       var c = confirm("Oled kindel?");
+
+      //kui ei ole kindel
+      if(!c){return;}
       console.log('kustutan');
       var ul = event.target.parentNode.parentNode;
   		var li = event.target.parentNode;
@@ -68,7 +71,7 @@
   			}
   		}
 
-  		localStorage.setItem('event', JSON.stringify(this.collection));
+  		localStorage.setItem('events', JSON.stringify(this.collection));
 
     },
 
@@ -88,12 +91,11 @@
       var finish_time = document.querySelector('.finish-time').value;
       console.log(document.querySelector('.meeting-description'));
 
-
-
       var meeting_description = document.querySelector('.meeting-description').value;
+      var id = guid();
 
 
-      var new_meeting = new Meeting(start_date, start_time, finish_date, finish_time, meeting_description);
+      var new_meeting = new Meeting(id, start_date, start_time, finish_date, finish_time, meeting_description);
 
 
       this.collection.push(new_meeting);
@@ -127,7 +129,8 @@
     }
   };
 
-  var Meeting = function(new_start_date, new_start_time, new_finish_date, new_finish_time, new_meeting_description){
+  var Meeting = function(new_id, new_start_date, new_start_time, new_finish_date, new_finish_time, new_meeting_description){
+    this.id = new_id;
     this.start_date = new_start_date;
     this.start_time = new_start_time;
     this.finish_date = new_finish_date;
@@ -208,6 +211,19 @@
     }
   };
 
+  //HELPER
+  function guid(){
+   var d = new Date().getTime();
+   if(window.performance && typeof window.performance.now === "function"){
+     d += performance.now(); //use high-precision timer if available
+   }
+   var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+     var r = (d + Math.random()*16)%16 | 0;
+     d = Math.floor(d/16);
+     return (c=='x' ? r : (r&0x3|0x8)).toString(16);
+   });
+   return uuid;
+ }
 
 
 
